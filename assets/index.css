@@ -1,0 +1,19 @@
+/* Général */
+.row { margin-top: 10px; }
+
+/* Panels de création des filtres */
+.panel-heading { padding: 5px 15px; }
+.panel-heading span { margin-right: 5px; }
+.panel-body { padding: 10px 15px; }
+
+/* Divs des filtres */
+button > input[type="checkbox"] { margin:0px 5px; }
+div.btn-group-vertical { margin-left: 10px; }
+div.tab-pane {padding-top:10px;}
+label.btn > span.glyphicon { margin-right: 5px; }
+
+/* Etiquettes */
+.label { font-size: 100%; margin-right: 10px; margin-bottom: 10px; }
+.label span.glyphicon { margin-left: 5px; }
+.label span.glyphicon:hover { cursor: pointer; }
+.tooltip-inner { max-width: 500px; text-align: left; }
