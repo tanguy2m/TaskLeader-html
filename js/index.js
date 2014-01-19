@@ -69,13 +69,9 @@ function displayFilterDiv(){
 	  .removeClass('hidden').addClass('show');	
 }
 
-function load(){
-
-	// Création de la liste des noms d'entité
-	$('body').data("listEntitiesNames",new Array());
-
+function displayDatabases(prefix,suffix){
 	//Ajout des bases actives
-	$.get('../getActiveDatabases', function(data) {		
+	$.get(prefix + '/databases' + suffix, function(data) {		
 		$(data).each(function(i,dbName){	
 			// Création des clés de la liste des entités
 			$('body').data("listEntitiesNames")[dbName] = new Array();
@@ -89,7 +85,7 @@ function load(){
 				.appendTo('#checkDB');
 					
 			// Création des filtres manuels
-			$.get('../getDBListentities?db='+dbName, function(data) {
+			$.get(prefix + '/' + dbName + '/entities/list' + suffix, function(data) {
 				
 				// Création du div filtre manuel de cette base
 				var $button = $('<button type="button" class="btn btn-default pull-right"></button>')
@@ -128,7 +124,7 @@ function load(){
 			},"json");
 			
 			// Récupération des filtres enregistrés
-			$.get('../getFilters?db='+dbName, function(data) {
+			$.get(prefix + '/' + dbName + '/filters' + suffix, function(data) {
 				$div = $('<div data-db="'+dbName+'" data-type="stored" class="hidden"></div>')
 					.appendTo('#filtreContent');
 				if(data.length==0){
@@ -153,12 +149,31 @@ function load(){
 			
 		// Sélection de la DB par défaut dans tous les champs
 		var defaultDB;
-		$.get('../getDefaultDB', function(data) {
+		$.get('/databases/default', function(data) {
 			$('#radioDB button[data-db='+data).addClass('active');
 			window.displayFilterDiv();
 		},"json");
 		
 	},"json");
+}
+
+function load(){
+	// Création de la liste des noms d'entité
+	$('body').data("listEntitiesNames",new Array());
+	
+	// Récupération de la liste des remotes éventuellement gérées
+	$.getJSON('../remotes', function(data) {
+		// Récupération des bases du serveur principal
+		displayDatabases('../','');
+		// Récupération des bases de tous les serveurs remote
+		_.each(data, function(element, index, list){
+			if(navigator.appName == "Microsoft Internet Explorer"){
+				displayDatabases('../','?remote=' + element.nom);
+			} else {
+				displayDatabases(element.url,'');
+			}
+		});
+	});
 }
 
 $(document).ready(function() {
